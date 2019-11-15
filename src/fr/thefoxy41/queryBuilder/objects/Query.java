@@ -15,8 +15,13 @@ import java.util.Map;
 
 public class Query extends BaseQuery<Query> {
     private final Connection connection;
+    private final boolean autoClose;
 
     public Query(Connection connection) throws DatabaseConnectionException {
+        this(connection, true);
+    }
+
+    public Query(Connection connection, boolean autoClose) throws DatabaseConnectionException {
         try {
             if (connection == null || connection.isClosed()) {
                 throw new DatabaseConnectionException("An error occurred while connecting to database: connection is null or closed");
@@ -27,6 +32,7 @@ public class Query extends BaseQuery<Query> {
 
         this.connection = connection;
         this.paramIndex = 0;
+        this.autoClose = autoClose;
     }
 
     /* INSERT */
@@ -74,6 +80,10 @@ public class Query extends BaseQuery<Query> {
     /* UPDATE */
 
     public Query update(String key, int value) {
+        return update(key, String.valueOf(value));
+    }
+
+    public Query update(String key, long value) {
         return update(key, String.valueOf(value));
     }
 
@@ -140,7 +150,7 @@ public class Query extends BaseQuery<Query> {
         } finally {
             try {
                 if (statement != null) statement.close();
-                if (this.connection != null) this.connection.close();
+                if (autoClose && this.connection != null) this.connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -169,7 +179,7 @@ public class Query extends BaseQuery<Query> {
         } finally {
             try {
                 if (statement != null) statement.close();
-                if (this.connection != null) this.connection.close();
+                if (autoClose && this.connection != null) this.connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -201,7 +211,7 @@ public class Query extends BaseQuery<Query> {
         } finally {
             try {
                 if (statement != null) statement.close();
-                if (this.connection != null) this.connection.close();
+                if (autoClose && this.connection != null) this.connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
