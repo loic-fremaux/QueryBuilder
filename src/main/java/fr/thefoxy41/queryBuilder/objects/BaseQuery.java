@@ -1,6 +1,7 @@
 package fr.thefoxy41.queryBuilder.objects;
 
 import fr.thefoxy41.queryBuilder.enums.SQLCondition;
+import fr.thefoxy41.queryBuilder.enums.SQLConjunctive;
 import fr.thefoxy41.queryBuilder.enums.SQLJoin;
 import fr.thefoxy41.queryBuilder.enums.SQLOrder;
 import fr.thefoxy41.queryBuilder.exceptions.DatabaseQueryException;
@@ -9,6 +10,7 @@ import fr.thefoxy41.queryBuilder.utils.StringUtils;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 abstract class BaseQuery<T extends BaseQuery> {
     int paramIndex;
@@ -22,6 +24,7 @@ abstract class BaseQuery<T extends BaseQuery> {
     boolean updatable = false;
 
     final List<String> where = new ArrayList<>();
+    final List<SQLConjunctive> whereSeparators = new ArrayList<>();
     final List<String> having = new ArrayList<>();
     final List<String> join = new ArrayList<>();
     final List<String> update = new ArrayList<>();
@@ -62,8 +65,17 @@ abstract class BaseQuery<T extends BaseQuery> {
         return where(condition, key, String.valueOf(value));
     }
 
+    public T where(SQLCondition condition, String key, long value) {
+        return where(condition, key, String.valueOf(value));
+    }
+
     public T where(SQLCondition condition, String key, String value) {
         this.where.add(checkSafe(key) + " " + condition.getOperator() + " " + bindParam(value));
+        return (T) this;
+    }
+
+    public T whereSeparators(SQLConjunctive... conjunctives) {
+        this.whereSeparators.addAll(Arrays.asList(conjunctives));
         return (T) this;
     }
 
@@ -125,8 +137,8 @@ abstract class BaseQuery<T extends BaseQuery> {
 
     public T join(SQLJoin join, String table, String firstKey, String secondKey) {
         this.join.add(join.name() + " JOIN " + checkSafe(table) + " ON "
-                + checkSafe(this.table) + "." + checkSafe(firstKey) + " = "
-                + checkSafe(table) + "." + checkSafe(secondKey));
+                + (firstKey.contains(".") ? "" : checkSafe(this.table) + ".") + checkSafe(firstKey) + " = "
+                + (secondKey.contains(".") ? "" : checkSafe(table) + ".") + checkSafe(secondKey));
         return (T) this;
     }
 
@@ -140,7 +152,8 @@ abstract class BaseQuery<T extends BaseQuery> {
     }
 
     String checkSafe(String param) {
-        if (!param.matches("[a-zA-Z_.]+") && !param.matches("count\\([a-zA-Z*_]+\\)")) {
+        if (!param.matches("[a-zA-Z_.]+") && !param.matches("[a-zA-Z_.]+ [a-zA-Z_.]+")
+                && !param.matches("[A-Z_]+\\([a-zA-Z*_]+\\)") && !param.matches("[A-Z_]+\\([a-zA-Z*_]+\\) [a-zA-Z_.]+")) {
             throw new InvalidParameterException("Parameter key must match [a-zA-Z*_]: '" + param + "' given");
         }
 
@@ -166,7 +179,16 @@ abstract class BaseQuery<T extends BaseQuery> {
             // bind where
             if (!this.where.isEmpty()) {
                 parts.add("WHERE");
-                parts.add("(" + StringUtils.join(") AND (", this.where) + ")");
+                int size = this.where.size();
+                IntStream.range(0, size).forEach(i -> {
+                    String condition = this.where.get(i);
+                    parts.add("(" + condition + ")");
+
+                    if (i + 1 < size) {
+                        SQLConjunctive conjunctive = whereSeparators.size() > i ? whereSeparators.get(i) : SQLConjunctive.AND;
+                        parts.add(conjunctive.name());
+                    }
+                });
             }
 
             // bind group

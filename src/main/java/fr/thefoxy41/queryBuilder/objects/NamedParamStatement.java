@@ -25,14 +25,23 @@ public class NamedParamStatement {
         prepStmt = conn.prepareStatement(statementWithNames.replaceAll(findParametersPattern.pattern(), "?"));
     }
 
-    public NamedParamStatement(Connection conn, String statementWithNames, int... resultParameters) throws SQLException {
+    public NamedParamStatement(Connection conn, String statementWithNames, int keys) throws SQLException {
+        Pattern findParametersPattern = Pattern.compile("(?<!')(:[\\w]*)(?!')");
+        Matcher matcher = findParametersPattern.matcher(statementWithNames);
+        while (matcher.find()) {
+            fields.add(matcher.group().substring(1));
+        }
+        prepStmt = conn.prepareStatement(statementWithNames.replaceAll(findParametersPattern.pattern(), "?"), keys);
+    }
+
+    public NamedParamStatement(Connection conn, String statementWithNames, int typeScroll, int updatable) throws SQLException {
         Pattern findParametersPattern = Pattern.compile("(?<!')(:[\\w]*)(?!')");
         Matcher matcher = findParametersPattern.matcher(statementWithNames);
         while (matcher.find()) {
             fields.add(matcher.group().substring(1));
         }
 
-        prepStmt = conn.prepareStatement(statementWithNames.replaceAll(findParametersPattern.pattern(), "?"), resultParameters);
+        prepStmt = conn.prepareStatement(statementWithNames.replaceAll(findParametersPattern.pattern(), "?"), typeScroll, updatable);
     }
 
     public void execute() throws SQLException {

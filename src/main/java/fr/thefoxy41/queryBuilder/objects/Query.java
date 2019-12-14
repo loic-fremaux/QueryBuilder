@@ -3,6 +3,7 @@ package fr.thefoxy41.queryBuilder.objects;
 import fr.thefoxy41.queryBuilder.enums.SQLCondition;
 import fr.thefoxy41.queryBuilder.exceptions.DatabaseConnectionException;
 import fr.thefoxy41.queryBuilder.exceptions.DatabaseQueryException;
+import fr.thefoxy41.queryBuilder.objects.result.QueryResultSet;
 import fr.thefoxy41.queryBuilder.utils.StringUtils;
 
 import java.sql.Connection;
@@ -117,7 +118,7 @@ public class Query extends BaseQuery<Query> {
 
     /* EXECUTE */
 
-    public ResultSet execute() throws SQLException, DatabaseQueryException {
+    public QueryResultSet execute() throws DatabaseQueryException {
         String query = makeQuery();
 
         // execute query
@@ -140,13 +141,13 @@ public class Query extends BaseQuery<Query> {
 
             // if query has result
             if (this.select != null) {
-                return statement.executeQuery();
+                return new QueryResultSet(statement.executeQuery());
             }
 
             statement.execute();
             return null;
         } catch (SQLException e) {
-            throw e;
+            throw new DatabaseQueryException(e, query);
         } finally {
             try {
                 if (statement != null) statement.close();
@@ -157,7 +158,7 @@ public class Query extends BaseQuery<Query> {
         }
     }
 
-    public int getRow() throws DatabaseQueryException, SQLException {
+    public int getRow() throws DatabaseQueryException {
         String query = makeQuery();
 
         // execute query
@@ -175,7 +176,7 @@ public class Query extends BaseQuery<Query> {
 
             return result.next() ? result.getInt(1) : -1;
         } catch (SQLException e) {
-            throw e;
+            throw new DatabaseQueryException(e, query);
         } finally {
             try {
                 if (statement != null) statement.close();
@@ -186,7 +187,7 @@ public class Query extends BaseQuery<Query> {
         }
     }
 
-    public void delete() throws DatabaseQueryException {
+    public int delete() throws DatabaseQueryException {
         List<String> parts = new ArrayList<>();
         parts.add("DELETE FROM");
         parts.add(this.table);
@@ -198,16 +199,18 @@ public class Query extends BaseQuery<Query> {
         String query = StringUtils.join(" ", parts);
         NamedParamStatement statement = null;
         try {
-            statement = new NamedParamStatement(this.connection, query);
+            statement = new NamedParamStatement(this.connection, query,
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
 
             // replace arguments
             for (String arg : args.keySet()) {
                 statement.bind(arg, args.get(arg));
             }
 
-            statement.execute();
+            return statement.executeUpdate();
         } catch (SQLException e) {
-            throw new DatabaseQueryException("You have an error in your sql syntax: " + query);
+            throw new DatabaseQueryException(e, query);
         } finally {
             try {
                 if (statement != null) statement.close();

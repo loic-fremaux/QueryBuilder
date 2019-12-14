@@ -9,6 +9,10 @@ public class DatabaseQueryException extends SQLException {
     }
 
     public DatabaseQueryException(String message, String query) {
-        super(message);
+        super(message, query);
+    }
+
+    public DatabaseQueryException(SQLException e, String query) {
+        super(e.getMessage(), query, e);
     }
 }
