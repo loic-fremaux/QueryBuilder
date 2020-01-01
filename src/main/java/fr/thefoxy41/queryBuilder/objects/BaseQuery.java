@@ -145,9 +145,8 @@ abstract class BaseQuery<T extends BaseQuery> {
     /* UTILS */
 
     String bindParam(String param) {
-        String key = ":param" + paramIndex;
+        final String key = ":param" + paramIndex++;
         args.put(key, param);
-        paramIndex++;
         return key;
     }
 

@@ -16,9 +16,10 @@ public class NamedParamStatement {
     private final PreparedStatement prepStmt;
     private final List<String> fields = new ArrayList<>();
 
+    private static final Pattern findParametersPattern = Pattern.compile("(?<!')(:[\\w]*)(?!')");
+
     public NamedParamStatement(Connection conn, String statementWithNames) throws SQLException {
-        Pattern findParametersPattern = Pattern.compile("(?<!')(:[\\w]*)(?!')");
-        Matcher matcher = findParametersPattern.matcher(statementWithNames);
+        final Matcher matcher = findParametersPattern.matcher(statementWithNames);
         while (matcher.find()) {
             fields.add(matcher.group().substring(1));
         }
@@ -26,8 +27,7 @@ public class NamedParamStatement {
     }
 
     public NamedParamStatement(Connection conn, String statementWithNames, int keys) throws SQLException {
-        Pattern findParametersPattern = Pattern.compile("(?<!')(:[\\w]*)(?!')");
-        Matcher matcher = findParametersPattern.matcher(statementWithNames);
+        final Matcher matcher = findParametersPattern.matcher(statementWithNames);
         while (matcher.find()) {
             fields.add(matcher.group().substring(1));
         }
@@ -35,8 +35,7 @@ public class NamedParamStatement {
     }
 
     public NamedParamStatement(Connection conn, String statementWithNames, int typeScroll, int updatable) throws SQLException {
-        Pattern findParametersPattern = Pattern.compile("(?<!')(:[\\w]*)(?!')");
-        Matcher matcher = findParametersPattern.matcher(statementWithNames);
+        final Matcher matcher = findParametersPattern.matcher(statementWithNames);
         while (matcher.find()) {
             fields.add(matcher.group().substring(1));
         }

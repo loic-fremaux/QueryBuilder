@@ -46,6 +46,10 @@ public class Query extends BaseQuery<Query> {
         return insert(item, String.valueOf(value));
     }
 
+    public Query insert(String item, double value) {
+        return insert(item, String.valueOf(value));
+    }
+
     public Query insert(String item, String value) {
         this.insert.put(checkSafe(item), bindParam(value));
         return this;
@@ -110,7 +114,7 @@ public class Query extends BaseQuery<Query> {
             String subKey = "subQuery" + this.paramIndex + "_" + key.substring(1);
             this.args.put(subKey, subQueryArgs.get(key));
 
-            subQueryStr.replace(key, subKey);
+            subQueryStr = subQueryStr.replace(key, subKey);
         }
 
         return subQueryStr;
