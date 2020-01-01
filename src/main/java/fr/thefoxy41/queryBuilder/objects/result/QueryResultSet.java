@@ -10,14 +10,14 @@ import java.util.Map;
 
 public class QueryResultSet {
     private int position = -1;
-    private List<Map<String, Object>> rows;
+    private final List<Map<String, Object>> rows;
 
     public QueryResultSet(ResultSet result) throws SQLException {
-        ResultSetMetaData metaData = result.getMetaData();
-        int columns = metaData.getColumnCount();
-        List<Map<String, Object>> rows = new ArrayList<>();
+        final ResultSetMetaData metaData = result.getMetaData();
+        final int columns = metaData.getColumnCount();
+        final List<Map<String, Object>> rows = new ArrayList<>();
         while (result.next()) {
-            Map<String, Object> row = new HashMap<>();
+            final Map<String, Object> row = new HashMap<>();
             for (int i = 1; i <= columns; i++) {
                 row.put(metaData.getColumnLabel(i), result.getObject(i));
             }
@@ -39,6 +39,14 @@ public class QueryResultSet {
         return (boolean) rows.get(position).get(name);
     }
 
+    public byte getByte(String name) {
+        return (byte) rows.get(position).get(name);
+    }
+
+    public short getShort(String name) {
+        return (short) rows.get(position).get(name);
+    }
+
     public int getInt(String name) {
         return (int) rows.get(position).get(name);
     }
@@ -49,6 +57,10 @@ public class QueryResultSet {
 
     public double getDouble(String name) {
         return (double) rows.get(position).get(name);
+    }
+
+    public float getFloat(String name) {
+        return (float) rows.get(position).get(name);
     }
 
     public String getString(String name) {
