@@ -123,7 +123,7 @@ public class Query extends BaseQuery<Query> {
     /* EXECUTE */
 
     public QueryResultSet execute() throws DatabaseQueryException {
-        String query = makeQuery();
+        final String query = makeQuery();
 
         // execute query
         NamedParamStatement statement = null;

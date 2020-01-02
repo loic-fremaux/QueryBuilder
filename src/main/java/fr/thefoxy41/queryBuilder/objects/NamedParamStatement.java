@@ -65,10 +65,10 @@ public class NamedParamStatement {
 
     public void bind(String name, String value) throws SQLException {
         if (name.startsWith(":")) name = name.substring(1);
-        prepStmt.setString(getIndex(name), value);
-    }
 
-    private int getIndex(String name) {
-        return fields.indexOf(name) + 1;
+        for (int index = 0; index < fields.size(); index++) {
+            if (!fields.get(index).equals(name)) continue;
+            prepStmt.setString(index + 1, value);
+        }
     }
 }
