@@ -152,8 +152,8 @@ abstract class BaseQuery<T extends BaseQuery> {
 
     String checkSafe(String param) {
         if (!param.matches("[a-zA-Z_.]+") && !param.matches("[a-zA-Z_.]+ [a-zA-Z_.]+")
-                && !param.matches("[A-Z_]+\\([a-zA-Z*_]+\\)") && !param.matches("[A-Z_]+\\([a-zA-Z*_]+\\) [a-zA-Z_.]+")) {
-            throw new InvalidParameterException("Parameter key must match [a-zA-Z*_]: '" + param + "' given");
+                && !param.matches("[A-Z_]+\\([a-zA-Z*_,]+\\)") && !param.matches("[A-Z_]+\\([a-zA-Z*_,]+\\) [a-zA-Z_.]+")) {
+            throw new InvalidParameterException("Parameter key must match [a-zA-Z*_,]: '" + param + "' given");
         }
 
         return param;
