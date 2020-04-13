@@ -67,6 +67,10 @@ public class QueryResultSet {
         return (String) rows.get(position).get(name);
     }
 
+    public Object getObject(String name) {
+        return rows.get(position).get(name);
+    }
+
     public boolean hasNext() {
         return position + 1 < rows.size();
     }
