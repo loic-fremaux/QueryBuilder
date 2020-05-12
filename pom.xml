@@ -6,15 +6,15 @@
 
     <groupId>fr.thefoxy41</groupId>
     <artifactId>QueryBuilder</artifactId>
-    <version>0.0.3</version>
+    <version>0.1.0</version>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <build>
-        <finalName>${project.name}</finalName>
+        <finalName>${project.name}-${project.version}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <defaultGoal>clean install</defaultGoal>
 
@@ -24,15 +24,15 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.3</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -48,7 +48,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>3.0.0-M1</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
@@ -56,7 +56,7 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.5.1</version>
+                <version>1.6.8</version>
                 <executions>
                     <execution>
                         <id>default-deploy</id>
@@ -68,7 +68,7 @@
                 </executions>
                 <configuration>
                     <serverId>calacraft-repo</serverId>
-                    <nexusUrl>http://nexus.calacraft.fr:28005/repository/maven-releases/</nexusUrl>
+                    <nexusUrl>https://nexus.calacraft.fr/repository/maven-releases/</nexusUrl>
                     <skipStaging>true</skipStaging>
                 </configuration>
             </plugin>
@@ -80,7 +80,7 @@
             <uniqueVersion>true</uniqueVersion>
             <id>calacraft-repo</id>
             <name>${project.artifactId}</name>
-            <url>http://nexus.calacraft.fr:28005/repository/maven-releases/</url>
+            <url>https://nexus.calacraft.fr/repository/maven-releases/</url>
             <layout>default</layout>
         </repository>
     </distributionManagement>
