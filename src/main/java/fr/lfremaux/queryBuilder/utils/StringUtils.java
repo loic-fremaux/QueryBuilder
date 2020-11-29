@@ -1,4 +1,4 @@
-package fr.thefoxy41.queryBuilder.utils;
+package fr.lfremaux.queryBuilder.utils;
 
 import java.util.List;
 import java.util.Map;

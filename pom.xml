@@ -4,14 +4,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.thefoxy41</groupId>
+    <groupId>fr.lfremaux</groupId>
     <artifactId>QueryBuilder</artifactId>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>lfremaux</id>
+            <url>https://nexus.lfremaux.fr/repository/maven-releases/</url>
+        </repository>
+    </repositories>
 
     <build>
         <finalName>${project.name}-${project.version}</finalName>
@@ -45,43 +52,14 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
-                <executions>
-                    <execution>
-                        <id>default-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <serverId>calacraft-repo</serverId>
-                    <nexusUrl>https://nexus.calacraft.fr/repository/maven-releases/</nexusUrl>
-                    <skipStaging>true</skipStaging>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
     <distributionManagement>
         <repository>
-            <uniqueVersion>true</uniqueVersion>
-            <id>calacraft-repo</id>
+            <id>lfremaux</id>
             <name>${project.artifactId}</name>
-            <url>https://nexus.calacraft.fr/repository/maven-releases/</url>
-            <layout>default</layout>
+            <url>https://nexus.lfremaux.fr/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 </project>

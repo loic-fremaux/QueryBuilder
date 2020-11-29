@@ -1,10 +1,10 @@
-package fr.thefoxy41.queryBuilder.objects;
+package fr.lfremaux.queryBuilder.objects;
 
-import fr.thefoxy41.queryBuilder.enums.SQLCondition;
-import fr.thefoxy41.queryBuilder.exceptions.DatabaseConnectionException;
-import fr.thefoxy41.queryBuilder.exceptions.DatabaseQueryException;
-import fr.thefoxy41.queryBuilder.objects.result.QueryResultSet;
-import fr.thefoxy41.queryBuilder.utils.StringUtils;
+import fr.lfremaux.queryBuilder.exceptions.DatabaseConnectionException;
+import fr.lfremaux.queryBuilder.exceptions.DatabaseQueryException;
+import fr.lfremaux.queryBuilder.objects.result.QueryResultSet;
+import fr.lfremaux.queryBuilder.enums.SQLCondition;
+import fr.lfremaux.queryBuilder.utils.StringUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

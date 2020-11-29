@@ -1,4 +1,4 @@
-package fr.thefoxy41.queryBuilder.objects.result;
+package fr.lfremaux.queryBuilder.objects.result;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

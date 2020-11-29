@@ -1,4 +1,4 @@
-package fr.thefoxy41.queryBuilder.enums;
+package fr.lfremaux.queryBuilder.enums;
 
 public enum SQLJoin {
 

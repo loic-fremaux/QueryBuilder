@@ -1,4 +1,4 @@
-package fr.thefoxy41.queryBuilder.exceptions;
+package fr.lfremaux.queryBuilder.exceptions;
 
 public class DatabaseConnectionException extends Exception {
 

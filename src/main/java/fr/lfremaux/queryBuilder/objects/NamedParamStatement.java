@@ -1,4 +1,4 @@
-package fr.thefoxy41.queryBuilder.objects;
+package fr.lfremaux.queryBuilder.objects;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
